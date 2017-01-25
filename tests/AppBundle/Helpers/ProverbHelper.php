@@ -24,7 +24,8 @@ class ProverbHelper
             ->setExplanation($explanation)
             ->setOrigin($origin)
             ->setCreated($date)
-            ->setModified($date);
+            ->setModified($date)
+            ->setPublished(new \DateTime('2017-01-24 20:00:00'));
     }
 
 }

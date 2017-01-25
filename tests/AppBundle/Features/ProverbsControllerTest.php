@@ -66,4 +66,18 @@ class ProverbsControllerTest extends WebTestCase
         $this->assertContains('It came from somewhere', $this->client->getResponse()->getContent());
         $this->assertContains('January 23, 2017', $this->client->getResponse()->getContent());
     }
+
+    /**
+     * @test
+     */
+    function user_cannot_view_unpublished_proverbs() {
+        $proverb = (new ProverbHelper())->getProverb()->setPublished(null);
+        $this->entityManager->persist($proverb);
+        $this->entityManager->flush();
+
+        $this->client->request('GET', '/proverbs/' . $proverb->getId());
+
+        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+        $this->assertTrue($this->client->getResponse()->isNotFound());
+    }
 }

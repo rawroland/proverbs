@@ -52,6 +52,13 @@ class Proverb
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="published", type="datetime", nullable=true)
+     */
+    private $published;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="modified", type="datetime", nullable=false)
      */
     private $modified;
@@ -186,6 +193,30 @@ class Proverb
     public function getModified()
     {
         return $this->modified;
+    }
+
+    /**
+     * Set published
+     *
+     * @param \DateTime $published
+     *
+     * @return Proverb
+     */
+    public function setPublished($published)
+    {
+        $this->published = $published;
+
+        return $this;
+    }
+
+    /**
+     * Get published
+     *
+     * @return \DateTime
+     */
+    public function getPublished()
+    {
+        return $this->published;
     }
 
     public function getFormattedCreatedDate()
