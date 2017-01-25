@@ -16,9 +16,13 @@ class ProverbsController extends Controller
      */
     public function show($id)
     {
-        $proverb = $this->getDoctrine()->getRepository('AppBundle:Proverb')->createQueryBuilder('Proverb')->select('proverb')
-          ->from('AppBundle:Proverb', 'proverb')->where('proverb.id = :id')->andWhere('proverb.published IS NOT 
-          NULL')->setParameter('id', $id)->getQuery()->getOneOrNullResult();
+        $proverb = $this->getDoctrine()
+          ->getRepository('AppBundle:Proverb')
+          ->published()
+          ->andWhere('proverb.id = :id')
+          ->setParameter('id', $id)
+          ->getQuery()
+          ->getOneOrNullResult();
         if (!$proverb) {
             throw new NotFoundHttpException();
         }

@@ -12,4 +12,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class ProverbRepository extends EntityRepository
 {
+    public function published()
+    {
+        return $this->createQueryBuilder('Proverb')
+          ->select('proverb')
+          ->from('AppBundle:Proverb', 'proverb')
+          ->where('proverb.published IS NOT NULL');
+    }
 }

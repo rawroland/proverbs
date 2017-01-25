@@ -2,7 +2,6 @@
 
 namespace Tests\AppBundle\Features;
 
-use AppBundle\Entity\Proverb;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -43,13 +42,12 @@ class ProverbsControllerTest extends WebTestCase
     /**
      * @test
      */
-    function user_can_view_a_proverb()
+    function user_can_view_a_published_proverb()
     {
         // Arrange
-        $proverb = (new ProverbHelper())->getProverb();
+        $proverb = (new ProverbHelper())->getPublishedProverb();
         $this->entityManager->persist($proverb);
-        $this->entityManager
-          ->flush();
+        $this->entityManager->flush();
 
         // Act
         $this->client->request('GET', '/proverbs/' . $proverb->getId());
@@ -71,7 +69,7 @@ class ProverbsControllerTest extends WebTestCase
      * @test
      */
     function user_cannot_view_unpublished_proverbs() {
-        $proverb = (new ProverbHelper())->getProverb()->setPublished(null);
+        $proverb = (new ProverbHelper())->getNonPublishedProverb();
         $this->entityManager->persist($proverb);
         $this->entityManager->flush();
 
