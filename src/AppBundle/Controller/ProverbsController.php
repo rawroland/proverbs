@@ -2,12 +2,36 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Repository\ProverbRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ProverbsController extends Controller
+/**
+ * Class ProverbsController
+ * @package AppBundle\Controller
+ * @author Roland Awemo
+ *
+ * @Route(service="app.proverbs_controller")
+ */
+class ProverbsController
 {
+    /**
+     * @var ProverbRepository
+     */
+    private $proverbs;
+
+    /**
+     * @var EngineInterface
+     */
+    private $templating;
+
+    public function __construct(ProverbRepository $proverbs, EngineInterface $templating)
+    {
+        $this->templating = $templating;
+        $this->proverbs = $proverbs;
+    }
+
     /**
      *
      * @Route("/proverbs/{id}", name="show_proverb", requirements={"id": "\d+"})
@@ -16,8 +40,7 @@ class ProverbsController extends Controller
      */
     public function show($id)
     {
-        $proverb = $this->getDoctrine()
-          ->getRepository('AppBundle:Proverb')
+        $proverb = $this->proverbs
           ->published()
           ->andWhere('proverb.id = :id')
           ->setParameter('id', $id)
@@ -26,6 +49,6 @@ class ProverbsController extends Controller
         if (!$proverb) {
             throw new NotFoundHttpException();
         }
-        return $this->render(':proverbs:show.html.twig', ['proverb' => $proverb]);
+        return $this->templating->renderResponse(':proverbs:show.html.twig', ['proverb' => $proverb]);
     }
 }

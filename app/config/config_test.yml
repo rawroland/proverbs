@@ -21,4 +21,12 @@ doctrine:
         connections:
             default:
                 driver: pdo_sqlite
-                memory: true
+#                path: %kernel.cache_dir%/test.db
+                charset: UTF8
+                memory: true # Memory surprisingly drops the database
+
+#services:
+#    app.exception_listener:
+#        class: Tests\AppBundle\DisableKernelExceptionListener
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.exception }

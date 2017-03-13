@@ -28,7 +28,7 @@ class ProverbRepositoryTest extends KernelTestCase
         static::bootKernel();
         $this->entityManager = static::$kernel->getContainer()->get('doctrine')->getManager();
         $this->createSchema($this->entityManager);
-        $this->proverbRepository = $this->entityManager->getRepository('AppBundle:Proverb');
+        $this->proverbRepository = static::$kernel->getContainer()->get('app.proverbs_repository');
         parent::setUp();
     }
 
@@ -43,14 +43,11 @@ class ProverbRepositoryTest extends KernelTestCase
      */
     function proverbs_with_a_published_date_are_published() {
         $proverb1 = (new ProverbHelper())->getPublishedProverb();
-        $this->entityManager->persist($proverb1);
-        $this->entityManager->flush();
+        $this->proverbRepository->save($proverb1);
         $proverb2 = (new ProverbHelper())->getPublishedProverb();
-        $this->entityManager->persist($proverb2);
-        $this->entityManager->flush();
+        $this->proverbRepository->save($proverb2);
         $proverb3 = (new ProverbHelper())->getNonPublishedProverb();
-        $this->entityManager->persist($proverb3);
-        $this->entityManager->flush();
+        $this->proverbRepository->save($proverb3);
 
         $proverbs = new ArrayCollection($this->proverbRepository->published()->getQuery()->getResult());
 

@@ -19,7 +19,6 @@ class ProverbTest extends \PHPUnit_Framework_TestCase
     {
         $proverb = (new ProverbHelper())->getProverb();
         $this->assertEquals('January 23, 2017', $proverb->getFormattedCreatedDate());
-
     }
 
 }
