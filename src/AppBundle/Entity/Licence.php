@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="licences")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\LicenceRepository")
  */
-class Licence
+class Licence implements Releasable
 {
     /**
      * @var int
@@ -207,5 +207,10 @@ class Licence
         $this->remaining -= $amount;
 
         return $this;
+    }
+
+    public function release()
+    {
+        $this->increaseRemaining(1);
     }
 }

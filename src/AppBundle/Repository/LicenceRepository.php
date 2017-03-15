@@ -51,4 +51,10 @@ class LicenceRepository extends BaseRepository
 
         return $licence;
     }
+
+    public function cancel(Licence $reserved)
+    {
+        $reserved->increaseRemaining(1);
+        $this->save($reserved);
+    }
 }

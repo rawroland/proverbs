@@ -195,7 +195,8 @@ class PurchaseLicenceTest extends WebTestCase
      */
     function a_licence_is_not_purchased_if_payment_fails()
     {
-        $licence = (new LicenceHelper())->createLicence('ad_free', $this->entityManager);
+        $licence = (new LicenceHelper())->createLicence('ad_free', $this->entityManager, 5);
+        $this->assertEquals(5, $licence->getRemaining());
 
         $this->purchaseLicence($licence, json_encode([
           'email' => 'foo@bar.com',
@@ -207,6 +208,7 @@ class PurchaseLicenceTest extends WebTestCase
 
         $this->assertEquals(422, $this->client->getResponse()->getStatusCode());
         $this->assertFalse($this->accountRepository->accountExists('foo@bar.com', 'ad_free'));
+        $this->assertEquals(5, $licence->getRemaining());
     }
 
     /**

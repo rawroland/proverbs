@@ -89,6 +89,7 @@ class AccountLicencesController
         } catch (NoResultException $exception) {
             return new JsonResponse([], 404);
         } catch (PaymentFailedException $exception) {
+            $this->licences->cancel($licence);
             return new JsonResponse([], 422);
         }
     }

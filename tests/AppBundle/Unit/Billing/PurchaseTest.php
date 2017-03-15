@@ -1,4 +1,5 @@
 <?php
+use AppBundle\Entity\Releasable;
 use AppBundle\Billing\Purchase;
 use Tests\AppBundle\Helpers\LicenceHelper;
 

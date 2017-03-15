@@ -37,4 +37,16 @@ class LicenceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(4, $licence->getRemaining());
         $this->assertEquals($licence, $reduced);
     }
+
+    /**
+     * @test
+     */
+    function release_licence()
+    {
+        $licence = (new LicenceHelper())->getLicence('ad_free')->setRemaining(0);
+
+        $licence->release();
+
+        $this->assertEquals(1, $licence->getRemaining());
+    }
 }

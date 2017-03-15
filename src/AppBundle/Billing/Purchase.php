@@ -3,6 +3,7 @@
 namespace AppBundle\Billing;
 
 use AppBundle\Entity\Licence;
+use AppBundle\Entity\Releasable;
 
 class Purchase
 {

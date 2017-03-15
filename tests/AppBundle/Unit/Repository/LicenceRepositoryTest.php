@@ -114,4 +114,18 @@ class LicenceRepositoryTest extends KernelTestCase
 
         $this->fail('An unavailable licence was erroneously reserved.');
     }
+
+    /**
+     * @test
+     */
+    function reserved_licence_can_be_cancelled()
+    {
+        $licence = (new LicenceHelper())->createLicence('free', $this->entityManager, 2);
+        $this->assertEquals(2, $licence->getRemaining());
+        $reserved = $this->licences->reserve($licence->getId());
+
+        $this->licences->cancel($reserved);
+
+        $this->assertEquals(2, $reserved->getRemaining());
+    }
 }
