@@ -80,16 +80,14 @@ class AccountLicencesController
         }
 
         try {
-            $licence = $this->licences->reserve($licenceId);
-            $purchase = Purchase::fromLicence($licence);
-            $this->paymentGateway->charge($purchase->totalCost(), $data['payment_token']);
-            $this->accounts->create($account, $licence, $purchase->totalCost());
+            $purchase = $this->licences->reserve($licenceId, $account);
+            $account = $purchase->complete($this->accounts, $this->paymentGateway, $data['payment_token']);
 
             return new JsonResponse($account->toArray(), 201);
         } catch (NoResultException $exception) {
             return new JsonResponse([], 404);
         } catch (PaymentFailedException $exception) {
-            $this->licences->cancel($licence);
+            $this->licences->cancel($purchase->article());
             return new JsonResponse([], 422);
         }
     }

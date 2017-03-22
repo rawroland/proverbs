@@ -2,12 +2,14 @@
 
 namespace Test\AppBundle\Repository;
 
+use AppBundle\Entity\Account;
 use AppBundle\Repository\LicenceRepository;
 use Behat\Mink\Exception\Exception;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NoResultException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Tests\AppBundle\Helpers\AccountHelper;
 use Tests\AppBundle\Helpers\LicenceHelper;
 use Tests\AppBundle\IsolatedDatabaseTest;
 
@@ -90,10 +92,12 @@ class LicenceRepositoryTest extends KernelTestCase
         $licence = (new LicenceHelper())->createLicence('free', $this->entityManager, 2);
         $this->assertEquals(2, $licence->getRemaining());
 
-        $reserved = $this->licences->reserve($licence->getId());
+        $account = (new AccountHelper())->getAccount()->setEmail('john.doe@example.com');
+        $purchase = $this->licences->reserve($licence->getId(), $account);
 
-        $this->assertEquals(1, $reserved->getRemaining());
-        $this->assertEquals($licence->getId(), $reserved->getId());
+        $this->assertEquals(1, $purchase->article()->getRemaining());
+        $this->assertEquals($licence->getId(), $purchase->article()->getId());
+        $this->assertInstanceOf(Account::class, $purchase->account());
     }
 
     /**
@@ -102,10 +106,11 @@ class LicenceRepositoryTest extends KernelTestCase
     function cannot_reserve_an_unavailable_licence()
     {
         $licence = (new LicenceHelper())->createLicence('free', $this->entityManager, 0);
+        $account = (new AccountHelper())->getAccount();
         $this->assertEquals(0, $licence->getRemaining());
 
         try {
-            $this->licences->reserve($licence->getId());
+            $this->licences->reserve($licence->getId(), $account);
         } catch (NoResultException $exception) {
             $this->assertEquals(0, $licence->getRemaining());
 
@@ -121,11 +126,12 @@ class LicenceRepositoryTest extends KernelTestCase
     function reserved_licence_can_be_cancelled()
     {
         $licence = (new LicenceHelper())->createLicence('free', $this->entityManager, 2);
+        $account = (new AccountHelper())->getAccount();
         $this->assertEquals(2, $licence->getRemaining());
-        $reserved = $this->licences->reserve($licence->getId());
+        $purchase = $this->licences->reserve($licence->getId(), $account);
 
-        $this->licences->cancel($reserved);
+        $this->licences->cancel($purchase->article());
 
-        $this->assertEquals(2, $reserved->getRemaining());
+        $this->assertEquals(2, $purchase->article()->getRemaining());
     }
 }

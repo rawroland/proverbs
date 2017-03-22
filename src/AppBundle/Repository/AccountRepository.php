@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Billing\Purchase;
 use AppBundle\Entity\Account;
 use AppBundle\Entity\Licence;
 
@@ -13,15 +14,15 @@ use AppBundle\Entity\Licence;
  */
 class AccountRepository extends BaseRepository
 {
-    public function create(Account $account, Licence $licence, $amount)
+    public function createFromPurchase(Purchase $purchase)
     {
         // TODO: Change password hashing and generation
         $current = new \DateTime();
-        $account->setCreated($current)
+        $purchase->account()->setCreated($current)
           ->setModified($current)
-          ->setAmount($amount)
-          ->setLicence($licence->reduceRemaining(1));
-        $this->save($account);
+          ->setAmount($purchase->totalCost())
+          ->setLicence($purchase->article()->reduceRemaining(1));
+        $this->save($purchase->account());
     }
 
     public function accountExists($email, $licenceType)

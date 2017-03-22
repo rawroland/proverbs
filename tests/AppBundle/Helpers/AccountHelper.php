@@ -30,6 +30,7 @@ class AccountHelper
           ->setEmail('foo@bar.com')
           ->setName('Jane')
           ->setSurname('Doe')
+          ->setPassword('password')
           ->setAmount(999)
           ->setLicence(
             (new LicenceHelper())

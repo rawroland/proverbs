@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Billing\Purchase;
+use AppBundle\Entity\Account;
 use AppBundle\Entity\Licence;
 use Doctrine\ORM\NoResultException;
 
@@ -40,16 +42,17 @@ class LicenceRepository extends BaseRepository
 
     /**
      * @param int $licenceId
-     * @return Licence
+     * @param Account $account
+     * @return Purchase
      */
-    public function reserve($licenceId)
+    public function reserve($licenceId, Account $account)
     {
         /** @var Licence $licence */
         $licence = $this->purchasable($licenceId)->getSingleResult();
         $licence->reduceRemaining(1);
         $this->save($licence);
 
-        return $licence;
+        return Purchase::fromLicence($licence, $account);
     }
 
     public function cancel(Licence $reserved)

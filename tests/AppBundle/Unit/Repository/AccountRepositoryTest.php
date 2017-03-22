@@ -2,6 +2,7 @@
 
 namespace Test\AppBundle\Repository;
 
+use AppBundle\Billing\Purchase;
 use AppBundle\Entity\Account;
 use AppBundle\Repository\AccountRepository;
 use Doctrine\ORM\EntityManager;
@@ -47,8 +48,9 @@ class AccountRepositoryTest extends KernelTestCase
           ->setSurname('Doe')
           ->setPassword('password');
         $licence = (new LicenceHelper())->createLicence('ad_free', $this->entityManager);
+        $purchase = Purchase::fromLicence($licence, $account);
 
-        $this->accountRepository->create($account, $licence, 999);
+        $this->accountRepository->createFromPurchase($purchase);
 
         $this->assertEquals(999, $account->getAmount());
         $this->assertTrue($this->accountRepository->accountExists('john.doe@example.com', 'ad_free'));
