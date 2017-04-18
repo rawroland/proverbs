@@ -4,6 +4,7 @@ namespace Tests\AppBundle\Billing;
 
 use AppBundle\Billing\FakePaymentGateway;
 use AppBundle\Billing\PaymentFailedException;
+use AppBundle\Billing\PaymentGateway;
 use AppBundle\Billing\StripePaymentGateway;
 use Stripe\Charge;
 use Stripe\Token;
@@ -37,18 +38,22 @@ class StripePaymentGatewayTest extends KernelTestCase
      */
     function charges_with_a_valid_token_are_valid()
     {
-        $paymentGateway = new StripePaymentGateway(static::$kernel->getContainer()->getParameter('stripe.secret'));
+        $paymentGateway = $this->getPaymentGateway();
 
-        $paymentGateway->charge(999, $this->validToken());
+        $newCharges = $paymentGateway->newChargesDuring(function (PaymentGateway $paymentGateway) {
+            $paymentGateway->charge(999, $paymentGateway->getValidTestToken());
+        });
 
-        $this->assertCount(1, $this->newCharges());
-        $this->assertEquals(999, $this->lastCharge()->amount);
+        $this->assertCount(1, $newCharges);
+        $this->assertEquals(999, $newCharges->reduce(function($sum, $current) { return $sum + $current;}, 0));
     }
+
     /**
      * @test
      */
-    function purchases_with_an_invalid_token_fail() {
-        $paymentGateway = new StripePaymentGateway(static::$kernel->getContainer()->getParameter('stripe.secret'));
+    function charges_with_an_invalid_token_fail()
+    {
+        $paymentGateway = $this->getPaymentGateway();
 
         try {
             $paymentGateway->charge(999, 'invalid-token');
@@ -58,21 +63,6 @@ class StripePaymentGatewayTest extends KernelTestCase
         }
 
         $this->fail('Charging with an invalid token does not throw a PaymentFailedException.');
-    }
-
-    /**
-     * @return string
-     */
-    protected function validToken()
-    {
-        return Token::create([
-            "card" => [
-                "number" => "4242424242424242",
-                "exp_month" => date('m'),
-                "exp_year" => date('Y') + 1,
-                "cvc" => "123"
-            ]
-        ], ['api_key' => static::$kernel->getContainer()->getParameter('stripe.secret')])->id;
     }
 
     /**
@@ -95,6 +85,14 @@ class StripePaymentGatewayTest extends KernelTestCase
             ['ending_before' => $this->lastCharge ? $this->lastCharge->id : null],
             ['api_key' => static::$kernel->getContainer()->getParameter('stripe.secret')]
         )['data'];
+    }
+
+    /**
+     * @return StripePaymentGateway
+     */
+    protected function getPaymentGateway()
+    {
+        return new StripePaymentGateway(static::$kernel->getContainer()->getParameter('stripe.secret'));
     }
 
 }

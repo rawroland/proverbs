@@ -68,7 +68,7 @@ class PurchaseLicenceTest extends WebTestCase
           'name' => 'John',
           'surname' => 'Doe',
           'password' => 'password',
-          'payment_token' => $this->paymentGateway->getValidToken(),
+          'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
         $this->purchaseLicence($licence, $json);
 
@@ -98,7 +98,7 @@ class PurchaseLicenceTest extends WebTestCase
           'name' => 'John',
           'surname' => 'Doe',
           'password' => 'password',
-          'payment_token' => $this->paymentGateway->getValidToken(),
+          'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]));
 
         $this->assertValidationError('email');
@@ -116,7 +116,7 @@ class PurchaseLicenceTest extends WebTestCase
           'name' => 'John',
           'surname' => 'Doe',
           'password' => 'password',
-          'payment_token' => $this->paymentGateway->getValidToken(),
+          'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]));
 
         $this->assertValidationError('email');
@@ -133,7 +133,7 @@ class PurchaseLicenceTest extends WebTestCase
           'email' => 'john@doe.com',
           'surname' => 'Doe',
           'password' => 'password',
-          'payment_token' => $this->paymentGateway->getValidToken(),
+          'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]));
 
         $this->assertValidationError('name');
@@ -150,7 +150,7 @@ class PurchaseLicenceTest extends WebTestCase
           'email' => 'foo@bar.com',
           'name' => 'John',
           'password' => 'password',
-          'payment_token' => $this->paymentGateway->getValidToken(),
+          'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]));
 
         $this->assertValidationError('surname');
@@ -167,7 +167,7 @@ class PurchaseLicenceTest extends WebTestCase
           'email' => 'foo@bar.com',
           'name' => 'John',
           'surname' => 'Doe',
-          'payment_token' => $this->paymentGateway->getValidToken(),
+          'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]));
 
         $this->assertValidationError('password');
@@ -223,7 +223,7 @@ class PurchaseLicenceTest extends WebTestCase
           'name' => 'John',
           'surname' => 'Doe',
           'password' => 'password',
-          'payment_token' => $this->paymentGateway->getValidToken(),
+          'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]));
 
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
@@ -243,7 +243,7 @@ class PurchaseLicenceTest extends WebTestCase
           'name' => 'John',
           'surname' => 'Doe',
           'password' => 'password',
-          'payment_token' => $this->paymentGateway->getValidToken(),
+          'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]));
 
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
@@ -265,7 +265,7 @@ class PurchaseLicenceTest extends WebTestCase
               'name' => 'Jane',
               'surname' => 'Doe',
               'password' => 'password',
-              'payment_token' => $this->paymentGateway->getValidToken(),
+              'payment_token' => $this->paymentGateway->getValidTestToken(),
             ]));
 
             $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
@@ -278,7 +278,7 @@ class PurchaseLicenceTest extends WebTestCase
           'name' => 'John',
           'surname' => 'Doe',
           'password' => 'password',
-          'payment_token' => $this->paymentGateway->getValidToken(),
+          'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]));
 
         $this->assertEquals(201, $this->client->getResponse()->getStatusCode());

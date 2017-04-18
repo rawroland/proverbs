@@ -59,7 +59,7 @@ class PurchaseTest extends KernelTestCase
         $purchase = Purchase::fromLicence($licence, $account);
         $paymentGateway = new FakePaymentGateway();
 
-        $account = $purchase->complete($this->accounts, $paymentGateway, $paymentGateway->getValidToken());
+        $account = $purchase->complete($this->accounts, $paymentGateway, $paymentGateway->getValidTestToken());
 
         $this->assertEquals(999, $account->getAmount());
         $this->assertTrue($this->accounts->accountExists('john.doe@example.com', 'ad_free'));
