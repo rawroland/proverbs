@@ -55,7 +55,7 @@ class StripePaymentGateway implements PaymentGateway
         ], ['api_key' => $this->apiKey])->id;
     }
 
-    public function newChargesDuring($callback)
+    public function newChargesDuring($callback) : Collection
     {
         $latestCharge = $this->lastCharge();
 

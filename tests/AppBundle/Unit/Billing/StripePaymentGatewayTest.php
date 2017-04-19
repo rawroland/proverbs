@@ -2,12 +2,10 @@
 
 namespace Tests\AppBundle\Billing;
 
-use AppBundle\Billing\FakePaymentGateway;
 use AppBundle\Billing\PaymentFailedException;
 use AppBundle\Billing\PaymentGateway;
 use AppBundle\Billing\StripePaymentGateway;
 use Stripe\Charge;
-use Stripe\Token;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -45,7 +43,7 @@ class StripePaymentGatewayTest extends KernelTestCase
         });
 
         $this->assertCount(1, $newCharges);
-        $this->assertEquals(999, $newCharges->reduce(function($sum, $current) { return $sum + $current;}, 0));
+        $this->assertEquals(999, $newCharges->sumOf());
     }
 
     /**
