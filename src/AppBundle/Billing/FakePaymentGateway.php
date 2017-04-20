@@ -55,6 +55,8 @@ class FakePaymentGateway implements PaymentGateway
     {
         $previousCharges = $this->charges;
         $callback($this);
-        return $this->charges->skip(count($previousCharges->toList()));
+        $charges = $this->charges->skip(count($previousCharges->toList()))->toList();
+
+        return new Collection(array_reverse($charges));
     }
 }

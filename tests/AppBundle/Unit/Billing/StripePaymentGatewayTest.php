@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\AppBundle\Billing;
+namespace Tests\AppBundle\Unit\Billing;
 
 use AppBundle\Billing\PaymentFailedException;
 use AppBundle\Billing\PaymentGateway;
@@ -13,6 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class StripePaymentGatewayTest extends KernelTestCase
 {
+
+    use PaymentGatewayContractTest;
 
     /**
      * @var Charge
@@ -29,21 +31,6 @@ class StripePaymentGatewayTest extends KernelTestCase
     public function tearDown()
     {
 
-    }
-
-    /**
-     * @test
-     */
-    function charges_with_a_valid_token_are_valid()
-    {
-        $paymentGateway = $this->getPaymentGateway();
-
-        $newCharges = $paymentGateway->newChargesDuring(function (PaymentGateway $paymentGateway) {
-            $paymentGateway->charge(999, $paymentGateway->getValidTestToken());
-        });
-
-        $this->assertCount(1, $newCharges);
-        $this->assertEquals(999, $newCharges->sumOf());
     }
 
     /**
@@ -86,9 +73,9 @@ class StripePaymentGatewayTest extends KernelTestCase
     }
 
     /**
-     * @return StripePaymentGateway
+     * @return PaymentGateway
      */
-    protected function getPaymentGateway()
+    protected function getPaymentGateway() : PaymentGateway
     {
         return new StripePaymentGateway(static::$kernel->getContainer()->getParameter('stripe.secret'));
     }

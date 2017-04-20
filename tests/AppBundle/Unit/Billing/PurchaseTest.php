@@ -1,4 +1,7 @@
 <?php
+
+namespace Tests\AppBundle\Unit\Billing;
+
 use AppBundle\Billing\FakePaymentGateway;
 use AppBundle\Entity\Releasable;
 use AppBundle\Billing\Purchase;
