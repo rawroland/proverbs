@@ -2,6 +2,7 @@
 
 namespace Tests\AppBundle\Unit\Billing;
 
+use AppBundle\Billing\PaymentFailedException;
 use AppBundle\Billing\PaymentGateway;
 
 trait PaymentGatewayContractTest
@@ -39,5 +40,24 @@ trait PaymentGatewayContractTest
 
         $this->assertCount(2, $newCharges);
         $this->assertEquals([5000, 4000], $newCharges->toList());
+    }
+
+    /**
+     * @test
+     */
+    function charges_with_an_invalid_token_fail()
+    {
+        $paymentGateway = $this->getPaymentGateway();
+        $newCharges = $paymentGateway->newChargesDuring(function (PaymentGateway $paymentGateway) {
+            try {
+                $paymentGateway->charge(999, 'invalid-token');
+            } catch (PaymentFailedException $exception) {
+                return;
+            }
+
+            $this->fail('Charging with an invalid token does not throw a PaymentFailedException.');
+        });
+
+        $this->assertCount(0, $newCharges);
     }
 }

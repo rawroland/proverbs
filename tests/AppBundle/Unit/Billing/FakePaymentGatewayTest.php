@@ -13,22 +13,6 @@ class FakePaymentGatewayTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    function charges_with_an_invalid_token_fail()
-    {
-        $paymentGateway = $this->getPaymentGateway();
-
-        try {
-            $paymentGateway->charge(999, 'invalid-token');
-        } catch (PaymentFailedException $exception) {
-            return;
-        }
-
-        $this->fail();
-    }
-
-    /**
-     * @test
-     */
     function running_a_hook_before_the_first_charge()
     {
         $paymentGateway = $this->getPaymentGateway();
@@ -48,7 +32,7 @@ class FakePaymentGatewayTest extends \PHPUnit_Framework_TestCase
     /**
      * @return PaymentGateway
      */
-    protected function getPaymentGateway() : PaymentGateway
+    protected function getPaymentGateway(): PaymentGateway
     {
         return new FakePaymentGateway([]);
     }
