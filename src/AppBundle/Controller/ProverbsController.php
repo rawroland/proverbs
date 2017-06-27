@@ -41,9 +41,7 @@ class ProverbsController
     public function show($id)
     {
         $proverb = $this->proverbs
-          ->published()
-          ->andWhere('proverb.id = :id')
-          ->setParameter('id', $id)
+          ->published($id)
           ->getQuery()
           ->getOneOrNullResult();
         if (!$proverb) {

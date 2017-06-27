@@ -10,11 +10,16 @@ namespace AppBundle\Repository;
  */
 class ProverbRepository extends BaseRepository
 {
-    public function published()
+    public function published(int $proverbId = null)
     {
-        return $this->createQueryBuilder('Proverb')
-          ->select('proverb')
-          ->from('AppBundle:Proverb', 'proverb')
-          ->where('proverb.published IS NOT NULL');
+        $queryBuilder = $this->createQueryBuilder('Proverb')
+             ->select('proverb')
+             ->from('AppBundle:Proverb', 'proverb')
+             ->where('proverb.published IS NOT NULL');
+
+        if ($proverbId) {
+            $queryBuilder->andWhere('proverb.id = :id')->setParameter('id', $proverbId);
+        }
+        return $queryBuilder;
     }
 }

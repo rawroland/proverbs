@@ -41,7 +41,8 @@ class ProverbRepositoryTest extends KernelTestCase
     /**
      * @test
      */
-    function proverbs_with_a_published_date_are_published() {
+    function proverbs_with_a_published_date_are_published()
+    {
         $proverb1 = (new ProverbHelper())->getPublishedProverb();
         $this->proverbRepository->save($proverb1);
         $proverb2 = (new ProverbHelper())->getPublishedProverb();
@@ -54,6 +55,24 @@ class ProverbRepositoryTest extends KernelTestCase
         $this->assertTrue($proverbs->contains($proverb1));
         $this->assertTrue($proverbs->contains($proverb2));
         $this->assertFalse($proverbs->contains($proverb3));
+    }
+
+    /**
+     * @test
+     */
+    function published_with_an_id_returns_a_single_entry()
+    {
+        // Arrange
+        $proverb1 = (new ProverbHelper())->getPublishedProverb();
+        $proverb2= (new ProverbHelper())->getPublishedProverb();
+        $this->proverbRepository->save($proverb1);
+        $this->proverbRepository->save($proverb2);
+
+        // Act
+        $published = $this->proverbRepository->published($proverb2->getId());
+
+        // Assert
+        $this->assertEquals($proverb2, $published->getQuery()->getOneOrNullResult());
     }
 
 }
