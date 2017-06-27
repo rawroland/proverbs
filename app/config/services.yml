@@ -7,3 +7,39 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+
+# Controllers
+    app.proverbs_controller:
+        class: AppBundle\Controller\ProverbsController
+        arguments: ['@app.proverbs_repository', '@templating']
+
+    app.account_licence_controller:
+        class: AppBundle\Controller\AccountLicencesController
+        arguments:
+            - '@app.accounts_repository'
+            - '@app.licences_repository'
+            - '@form.factory'
+            - '@app.payment_gateway'
+
+# Repositories
+    app.proverbs_repository:
+        class: AppBundle\Repository\ProverbRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments:
+            - AppBundle\Entity\Proverb
+
+    app.licences_repository:
+        class: AppBundle\Repository\LicenceRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments:
+            - AppBundle\Entity\Licence
+
+    app.accounts_repository:
+        class: AppBundle\Repository\AccountRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments:
+            - AppBundle\Entity\Account
+#
+# Miscellaneous
+    app.payment_gateway:
+        class: AppBundle\Billing\StripePaymentGateway

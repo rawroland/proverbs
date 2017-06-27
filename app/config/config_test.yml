@@ -14,3 +14,23 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: true
+
+doctrine:
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                driver: pdo_sqlite
+#                path: %kernel.cache_dir%/test.db
+                charset: UTF8
+                memory: true # Memory surprisingly drops the database
+
+services:
+#    app.exception_listener:
+#        class: Tests\AppBundle\DisableKernelExceptionListener
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.exception }
+
+
+parameters:
+    stripe.secret: 'sk_test_3cYuG6jo9iUcjeGw3SrAOiBJ'

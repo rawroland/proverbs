@@ -1,0 +1,11 @@
+default:
+    suites:
+        rawroland:
+            type: symfony_bundle
+            bundle: AppBundle
+    extensions:
+        Behat\Symfony2Extension: ~
+        Behat\MinkExtension:
+            sessions:
+                my_session:
+                    symfony2: ~
